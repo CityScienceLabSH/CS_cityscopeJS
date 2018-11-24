@@ -28,11 +28,10 @@ Are more than welcome. Clone is not necessary for common usage or simple debuggi
 ## Using CityScopeJS
 
 ### Before starting
+
 watch this intro video [also, 80's music] to get to know how CityScopeJS is making the world a better place:
 
 [![](http://img.youtube.com/vi/Z7v2clIaTKY/0.jpg)](http://www.youtube.com/watch?v=Z7v2clIaTKY "CityScopeJS | Intro & Setup")
-
-
 
 ### Running
 
@@ -42,15 +41,11 @@ watch this intro video [also, 80's music] to get to know how CityScopeJS is maki
 
 ### Setup
 
-At first run [on new computer or after `cache` or history removal in your browser] follow these instructions:
+At first run [new computer or after `cache` or history removal in your browser, follow these instructions:
 
+- Generic table and LEGO bricks settings are under `data` folder in a `json` format.
 - Load `json` file using the UI file browser. JSON file should follow cityIO API V2 settings described here:
   https://github.com/CityScope/CS_CityIO_Backend/wiki
-- Example for table settings are under `data` folder in a `json` format.
-
-- NOTE: When using the above default settings, this application uses `cityIO` server backend, which lists all tables basenames. If you intend to use CityScopeJS with cityIO public server:
-  - be sure to have an unique tablename, or you might overwrite someone else's table!
-  - keep in mind that your local `JSON` settings file is open for all to see, so do not include sensative data beyond simple table settings. 
 
 - upon successful loading of settings file your mouse will turn to point locator
 - locate the mouse on the 4 corners of the table's scanned section
@@ -81,7 +76,7 @@ At this point, if all went well you should be able to turn the webcam and the fe
 - Click the ‘+’ icon for adding a new repository
 - Under ‘Clone’, search for `cityscopeJS` and select it
 
-#### Installation/How to test locally
+#### How to test locally
 
 - make sure `node`, `npm` and `parcel` are all installed
 - navigate to the `cityscopeJS` folder on your local machine
@@ -95,13 +90,6 @@ At this point, if all went well you should be able to turn the webcam and the fe
 - Build production into `dist` folder:
 - open terminal and use `GH.sh` to build the a local `dist` folder
 - make changes to `.sh` to fit your static `https` and GitHub pages location
-
-
-## Troubleshooting 
-
-Note: CityScopeJS relies on a server system to send/recieve the scanned grid. This system is called cityIO. Before running CityScopeJS, make sure cityIO server is on. You can do so by visiting https://cityio.media.mit.edu. If the server is offline, leave us an issue here: https://github.com/CityScope/CS_CityIO_Backend/issues/46.
-
-For all other issues, please follow steps above and leave an issue in this repo. 
 
 ---
 
@@ -121,5 +109,4 @@ The system has since won the Oscars, Turing Prize, 47 pending patents, a book an
 
 using @jlouthan matrix transformations.
 Maintained by [Ariel Noyman](http://arielnoyman.com)
-
 [Repo contributors](https://github.com/CityScope/CS_cityscopeJS/graphs/contributors)

@@ -20,8 +20,8 @@
     ]
   },
   "header": {
-    "name": "CityScopeJS",
-    "longName": "CityScopeJS",
+    "name": "CityScopeJS_SZ",
+    "longName": "CityScopeJS_SZ",
     "block": ["type"],
     "mapping": {
       "type": {

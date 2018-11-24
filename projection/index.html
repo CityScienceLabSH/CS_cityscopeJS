@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style type="text/css">
+    	body {
+    		background-color: #000;
+    		margin: 0;
+    	}
+    	svg {
+    		width: 100%;
+    	}
+
+    	video {
+    		position: absolute;
+    		top:0px;
+    		left:0px;
+    	}
+
+    	.rec{
+    		position: absolute;
+    	}
+
+    	#btn {
+    		position: absolute;
+    		top:500px;
+    		left:540px;
+    		display: inline-block;
+    		width: 30px;
+    		border-radius: 15px;
+    		background: #CCCCCC;
+    		border: none;
+    		cursor: pointer;
+    	}
+    </style>
+    <title>projection</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.js"></script>
+
+</head>
+<body>
+	<div style="position:absolute;z-index:0;">
+		<video src='video3.mp4' width='600' height='600' autoplay loop="-1"></video>
+	</div>
+	<svg id='svg'></svg>
+	<div id='icon'></div>
+	<button id='btn'>UI</button>	
+
+<script type="text/javascript">
+	document.getElementById("btn")
+	        .addEventListener("click", function() {
+	  var state = document.getElementById("icon").hidden 
+	  if (state == true){
+	  	document.getElementById("icon").hidden = false
+	  }
+	  else{
+	  	document.getElementById("icon").hidden = true
+	  }
+	}, false);
+
+	var svg = d3.select("#svg")
+
+	var x0 = 0;
+	var y0 = 0;
+
+	var dataset = [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100]
+	var dataset2 = [10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10,
+					10,10,10,10,10,10,10,10,10,10]
+
+
+	// var rectGroup = svg.append('g').attr('id','g1')
+	// rectGroup.selectAll("#g1")
+	// 	  .data(dataset)
+	// 	  .enter()
+	// 	  .append("rect")
+	// 	.attr("id",function(d,i){ return 'rect'+i })
+	// 	.attr("x",function(d,i){//每个矩形的起始x坐标
+	// 			return x0+(i%4) * 150;
+	// 	  })//每个矩形的起始x坐标
+	// 	.attr("y",function(d,i){//每个矩形的起始y坐标
+	// 			return y0+parseInt(i/4) * 150;
+	// 	  })
+	// 	.attr("width",150)
+	// 	.attr("height",150)//每个矩形的高度
+	// 	// .attr("fill","white")//填充颜色
+	// 	.attr("stroke","white")//填充颜色
+
+	// var svg2 = d3.select("#svg")
+	// var rectGroup2 = svg.append('g').attr('id','g2')
+	// svg2.selectAll('rect')
+	// .data(dataset2)
+	//   .enter()
+	// .append("rect")
+	// .attr('class','rec')
+	// .attr("x",function(d,i){//每个矩形的起始x坐标
+	// 		return x0+160+(i%10) * 13;
+	//   })//每个矩形的起始x坐标
+	// .attr("y",function(d,i){//每个矩形的起始y坐标
+	// 		return y0+460+parseInt(i/10) * 13;
+	//   })
+	// .attr("width",13)
+	// .attr("height",13)//每个矩形的高度
+	// .attr("fill","white")//填充颜色
+	// .attr("stroke","black")//填充颜色
+
+    //initial data
+    // tmpData = [1, 4, 0, 3, 5, 2, 4, 0, 4, 5, 2, 5, 3, 4, 4, 0, 3, 4, 2, 3, 3, 4, 0, 4, 2, 1, 3, 2, 2, 2, 4, 0, 2, 4, 5, 1, 1, 3, 5, 1, 2, 4, 1, 4, 3, 5, 2, 0, 0, 0, 1, 2, 5, 5, 5, 5, 4, 1, 0, 0, 3, 3, 4, 5, 2, 5, 3, 2, 2, 2, 0, 3, 3, 1, 5, 3, 0, 5, 2, 1, 1, 4, 3, 2, 3, 3, 1, 1, 1, 1, 5, 1, 2, 0, 5, 4, 1, 5, 0, 1]
+
+    mapList = ['icon/0000comercial.svg','icon/0001incubator.svg','icon/0011service.svg','icon/0101keylab.svg','icon/0111cocreation.svg','icon/1111startup.svg']
+
+    let tableName = "CityScopeJS_SZ";
+
+	let cityIOtableURL =
+	  "https://cityio.media.mit.edu/api/table/" + tableName.toString();
+
+    let interval = 500;
+
+	async function init() {
+	  cityIOupdater();
+	}
+
+
+	function cityIOupdater() {
+	  let cityIOdata;
+	  let tmpData;
+	  let recordData = 'initial';
+	  //loop cityIO update recursively
+	  setInterval(updateCityIO, interval);
+	  //update grid if cityIO new data arrives
+
+	  function compare(recordData,currentData){
+	  	changeList = []
+	  	for (var i=0; i<100; i++){
+	  		if (recordData[i]!=currentData[i]){
+	  			changeList.push(i)
+	  		}
+	  	}
+	  	if (changeList.length){
+	  		return changeList
+	  	}
+	  	else {
+	  		return true
+	  	}
+	  }
+
+	  async function updateCityIO() {
+	    //get the data through promise
+	    cityIOdata = await getCityIO(cityIOtableURL);
+	    for (var i=0; i<100; i++) {
+	    	if ((cityIOdata['grid'][i] == 1)||(cityIOdata['grid'][i] == 2)||(cityIOdata['grid'][i] == 3)||(cityIOdata['grid'][i] == 4)){
+	    		cityIOdata['grid'][i] = 1
+	    	}
+	    	if ((cityIOdata['grid'][i] == 5)||(cityIOdata['grid'][i] == 6)){
+	    		cityIOdata['grid'][i] = 2
+	    	}
+	    	if ((cityIOdata['grid'][i] == 7)||(cityIOdata['grid'][i] == 8)){
+	    		cityIOdata['grid'][i] = 3
+	    	}
+	    	if ((cityIOdata['grid'][i] == 9)||(cityIOdata['grid'][i] == 10)||(cityIOdata['grid'][i] == 11)||(cityIOdata['grid'][i] == 12)){
+	    		cityIOdata['grid'][i] = 4
+	    	}
+	    	if (cityIOdata['grid'][i] == 13){
+	    		cityIOdata['grid'][i] = 5
+	    	}
+	    }
+	    tmpData = cityIOdata['grid'];
+	    if (recordData == 'initial') {
+	    	var tmp = document.createElement('embed');
+		    tmp.src='icon/background.svg';
+		    tmp.width = '130px'
+		    tmp.height = '130px'
+		    tmp.style.position = "absolute";
+		    tmp.style.background = "#FFFFFF";
+		    tmp.style.left = 160+"px";
+		    tmp.style.top = 460+"px"
+		    document.getElementById('icon').appendChild(tmp);
+
+	    	for (var i=0; i<100; i++){
+		    	var tmp = document.createElement('embed');
+			    tmp.id = 'id'+i;
+			    tmp.src=mapList[tmpData[i]];
+			    tmp.width = '9px'
+			    tmp.height = '9px'
+			    tmp.style.position = "absolute";
+			    num = 162+13*parseInt(Math.abs(9-i%10));
+			    tmp.style.left = num+"px";
+			    num = 462+13*parseInt(i/10);
+			    tmp.style.top = num+"px"
+			    document.getElementById('icon').appendChild(tmp);    
+			    }
+		    recordData = tmpData;
+	    }
+	    else if (compare(recordData,tmpData)!=true){
+
+	    	list = compare(recordData,tmpData)
+	    	for (var i=0; i<list.length; i++){
+			    tmp = document.getElementById('id'+list[i])
+			    document.getElementById('icon').removeChild(tmp);
+			    var tmp = document.createElement('embed');
+			    tmp.id = 'id'+list[i];
+			    tmp.src=mapList[tmpData[list[i]]];
+			    if (tmpData[list[i]] == -1){
+			    	tmp.src='icon/-1brain.svg'
+			    }
+			    tmp.width = '9px'
+			    tmp.height = '9px'
+			    tmp.style.position = "absolute";
+			    num = 162+13*parseInt(Math.abs(9-list[i]%10));
+			    tmp.style.left = num+"px";
+			    num = 462+13*parseInt(list[i]/10);
+			    tmp.style.top = num+"px"
+			    document.getElementById('icon').appendChild(tmp);
+			}
+			recordData = tmpData;
+	    }
+	  }
+	}
+
+
+    function getCityIO(cityIOtableURL) {
+	  // console.log("trying to fetch " + cityIOtableURL);
+	  return fetch(cityIOtableURL)
+	    .then(function(response) {
+	      return response.json();
+	    })
+	    .then(function(cityIOdata) {
+	      // console.log("got cityIO table at " + cityIOdata.meta.timestamp);
+	      console.log(cityIOdata);
+	      return cityIOdata;
+	    });
+	}
+
+
+	init();
+</script>
+
+</body>
+</html>
